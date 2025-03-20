@@ -8,6 +8,7 @@ export const formSchema = (type:string) => z.object({
     postalCode: type==='Sign up'? z.string().optional():z.string(),
     dob: type==='Sign up'? z.string().optional():z.string(),
     ssn: type==='Sign up'? z.string().optional():z.string(),
+    city: type==='Sign up'? z.string().optional():z.string(),
 
     username: z.string().min(3,{
         message: "Username should be at least 3 characters long"

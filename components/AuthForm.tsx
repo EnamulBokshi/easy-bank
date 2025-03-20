@@ -9,22 +9,20 @@ import { z } from 'zod'
 
 import {
     Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { formSchema } from '@/zodSchema/Schema'
 import FormInput from './FormInput'
 import { Loader2 } from 'lucide-react'
+import SignIn from '@/app/(auth)/sign-in/page'
+import { useRouter } from 'next/navigation'
+import { signUp } from '@/lib/actions/user.actions'
+
 
 
 
 const AuthForm = ({ type }: { type: string }) => {
+    const router = useRouter()
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(false)
     const authFormSchema = formSchema(type)
@@ -41,22 +39,39 @@ const AuthForm = ({ type }: { type: string }) => {
             state: '',
             postalCode: '',
             dob: '',
-            ssn: ''
+            ssn: '',
+            city:''
 
         }
     })
 
-    console.log(typeof form)
-    function onSubmit(values: z.infer<typeof authFormSchema>) {
+
+    const  onSubmit = async (data: z.infer<typeof authFormSchema>) => {
 
         setLoading(true)
+        try {
+            if (type === 'Sign up'){
+                const newUser = await signUp(data);
+                setUser(newUser)
+            }
 
-        console.log(values);
-
-        setTimeout(() => {
+            if (type === 'Sign in'){
+                // const response = await SignIn({
+                //     email:data.email,
+                //     password:data.password
+                // })
+                // if (response){
+                //     router.push('/')
+                // }
+            }
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
+        finally{
             setLoading(false)
-        }, 2000)
-        // setLoading(false)
+        }
 
     }
     return (
@@ -107,6 +122,7 @@ const AuthForm = ({ type }: { type: string }) => {
 
                                             </div>
                                             <FormInput control={form.control} name='address' label='Address' placeholder='Address' />
+                                            <FormInput control={form.control} name='city' label='City' placeholder='ex: Dhaka' />
                                             <div className='flex justify-between gap-4'>
 
                                                 <FormInput control={form.control} name='state' label='State' placeholder='ex: Dhaka' />
