@@ -5,13 +5,17 @@ import { Input } from './ui/input'
 import { formSchema } from '@/zodSchema/Schema';
 import { z } from 'zod';
 
+const authFormSchema = formSchema('Sign up')
+
 interface FormInputProps {
-    control: Control<z.infer<typeof formSchema>>;
-    name: FieldPath<z.infer<typeof formSchema>>;
+    control: Control<z.infer<typeof authFormSchema>>;
+    name: FieldPath<z.infer<typeof authFormSchema>>;
     type?:string;
+    placeholder?:string;
+    label?:string;
 }
 
-const FormInput = ({ control, name, type }: FormInputProps) => {
+const FormInput = ({ control, name, type = 'text', placeholder, label}: FormInputProps) => {
   const { errors } = useFormState({ control });
   
   return (
@@ -22,11 +26,12 @@ const FormInput = ({ control, name, type }: FormInputProps) => {
             <FormItem>
                 <FormLabel htmlFor={name}>
                     {
+                        label ||
                         name.charAt(0).toUpperCase() + name.slice(1)
                     }
                 </FormLabel>
                 <FormControl>
-                    <Input placeholder={`Enter your ${name}`} {...field} type={type}/>
+                    <Input placeholder={placeholder} {...field} type={type}/>
                 </FormControl>
                 <FormDescription>
                     {/* Optional description can go here */}
