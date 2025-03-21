@@ -25,7 +25,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
                 <SheetTrigger>
                     <FaBars className='text-2xl' />
                 </SheetTrigger>
-                <SheetContent side='left' className=''>
+                <SheetContent side='left'>
                     <div className='flex flex-col justify-between items-center h-full'>
                     <nav className='flex flex-col gap-4 p-5'>
                         <Link href={'/'}

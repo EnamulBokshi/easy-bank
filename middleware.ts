@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getLoggedUser } from './lib/actions/user.actions'
-import next from 'next';
  
 // This function can be marked `async` if using `await` inside
 const publicRoute =['/sign-in','/sign-up','/forgot-password','/reset-password']

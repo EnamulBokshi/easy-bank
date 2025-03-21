@@ -105,7 +105,7 @@ const AuthForm = ({ type }: { type: string }) => {
 
     }
     return (
-        <section className='auth-form'>
+        <section className='auth-form '>
             <Link href={'/'}
                 className='cursor-pointer items-center  gap-2 flex '
             >
@@ -175,8 +175,8 @@ const AuthForm = ({ type }: { type: string }) => {
                                 {
                                     type === 'Sign in' && (
                                         <>
-                                            <FormInput control={form.control} name='email' type='email' />
-                                            <FormInput control={form.control} name='password' type='password' />
+                                            <FormInput control={form.control} name='email' type='email' placeholder='Enter your email'/>
+                                            <FormInput control={form.control} name='password' type='password' placeholder='Enter your password' />
 
                                             
                                         </>
