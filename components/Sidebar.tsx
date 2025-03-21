@@ -11,6 +11,7 @@ import { BiDollarCircle } from "react-icons/bi";
 
 import { MdChangeHistory } from "react-icons/md";
 import { SiMoneygram } from "react-icons/si";
+import Footer from "./Footer";
 
 export const sidebarLinks = [
     {
@@ -75,6 +76,8 @@ const Sidebar = ({ user }: SiderbarProps) => {
                 }
 
             </nav>
+
+            <Footer user={user}/>
         </section>
     )
 }

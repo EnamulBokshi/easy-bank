@@ -11,12 +11,11 @@ import {
     Form,
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { formSchema } from '@/zodSchema/Schema'
+import { formSchema,signInFormSchema} from '@/zodSchema/Schema'
 import FormInput from './FormInput'
 import { Loader2 } from 'lucide-react'
-import SignIn from '@/app/(auth)/sign-in/page'
 import { useRouter } from 'next/navigation'
-import { signUp } from '@/lib/actions/user.actions'
+import { signIn, signUp } from '@/lib/actions/user.actions'
 
 
 
@@ -25,7 +24,8 @@ const AuthForm = ({ type }: { type: string }) => {
     const router = useRouter()
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(false)
-    const authFormSchema = formSchema(type)
+    const authFormSchema = formSchema(type==='Sign up')
+    const signInSchema = signInFormSchema
     const form = useForm<z.infer<typeof authFormSchema>>({
         resolver: zodResolver(authFormSchema),
         defaultValues: {
@@ -40,36 +40,66 @@ const AuthForm = ({ type }: { type: string }) => {
             postalCode: '',
             dob: '',
             ssn: '',
-            city:''
+            city: ''
 
         }
     })
 
+    const signInForm = useForm<z.infer<typeof signInFormSchema>>({
+        resolver: zodResolver(signInFormSchema),
+        defaultValues: {
+            email: '',
+            password: ''
+        }
 
-    const  onSubmit = async (data: z.infer<typeof authFormSchema>) => {
+    })
+    const {errors} = form.formState;
+    // console.log(errors)
+
+    const onSignUp = async (data: z.infer<typeof signInSchema> | z.infer<typeof signInFormSchema>) => {
 
         setLoading(true)
+
         try {
-            if (type === 'Sign up'){
+       
                 const newUser = await signUp(data);
                 setUser(newUser)
-            }
+                if (newUser) {
+                    router.push('/')
+                }
+        
 
-            if (type === 'Sign in'){
-                // const response = await SignIn({
-                //     email:data.email,
-                //     password:data.password
-                // })
-                // if (response){
-                //     router.push('/')
-                // }
-            }
-            
         } catch (error) {
             console.log(error)
-            
+
         }
-        finally{
+        finally {
+            setLoading(false)
+        }
+
+    }
+    const onSignIn = async (data: z.infer<typeof signInFormSchema>) => {
+        setLoading(true)
+        console.log("onSubmit called")
+        try {
+            if (type === 'Sign in') {
+                console.log('clicked')
+                const response = await signIn({
+                    email: data.email,
+                    password: data.password
+                })
+                console.log(response)
+                if (response) {
+                    router.push('/')
+                }
+            }
+            console.log("all passed")
+
+        } catch (error) {
+            console.log(error)
+
+        }
+        finally {
             setLoading(false)
         }
 
@@ -109,7 +139,7 @@ const AuthForm = ({ type }: { type: string }) => {
                 </div> :
                     <>
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+                            <form onSubmit={type === 'Sign up'? form.handleSubmit(onSignUp): form.handleSubmit(onSignIn)} className='space-y-8'>
 
                                 {
                                     type === 'Sign up' && (
@@ -147,6 +177,8 @@ const AuthForm = ({ type }: { type: string }) => {
                                         <>
                                             <FormInput control={form.control} name='email' type='email' />
                                             <FormInput control={form.control} name='password' type='password' />
+
+                                            
                                         </>
                                     )
                                 }

@@ -15,6 +15,7 @@ import Image from 'next/image'
 import { sidebarLinks } from './Sidebar'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import Footer from './Footer'
 
 const MobileNav = ({ user }: MobileNavProps) => {
     const pathname = usePathname()
@@ -24,7 +25,8 @@ const MobileNav = ({ user }: MobileNavProps) => {
                 <SheetTrigger>
                     <FaBars className='text-2xl' />
                 </SheetTrigger>
-                <SheetContent side='left'>
+                <SheetContent side='left' className=''>
+                    <div className='flex flex-col justify-between items-center h-full'>
                     <nav className='flex flex-col gap-4 p-5'>
                         <Link href={'/'}
                             className='mb-12 cursor-pointer items-center ps-10 gap-2 flex '
@@ -64,15 +66,13 @@ const MobileNav = ({ user }: MobileNavProps) => {
                         }
                         
                     </nav>
-                    <footer className='bottom-0 absolute w-full  p-5 border-t-2'>
-                            <SheetDescription>
-                                <p className='text-gray-500 text-sm'>
-                                    © 2021 EasyBanking. All rights reserved.
-                                </p>
-                            </SheetDescription>
-                    </footer>
+                    <Footer user={user} device='mobile'/>
+                    </div>
+
                 </SheetContent>
+                
             </Sheet>
+            
         </section>
     )
 }

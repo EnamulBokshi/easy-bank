@@ -1,11 +1,31 @@
 import HeaderContainer from '@/components/HeaderContainer'
 import RightSidebar from '@/components/RightSidebar'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
+import { getLoggedUser } from '@/lib/actions/user.actions'
+import { Loader2 } from 'lucide-react'
 import React from 'react'
 
-const Home = () => {
-  const loggedUser = { firstName: 'John', lastName: 'Doe', email: 'someone@email.com'}
+const Home = async () => {
+  const loggedUser = await getLoggedUser() || {
+    $id: '',
+    email: '',
+    userId: '',
+    dwollaCustomerUrl: '',
+    dwollaCustomerId: '',
+    firstName: '',
+    lastName: '',
+    name:'',
+    address1: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    dateOfBirth: '',
+    ssn: ''
+  };
 
+  if(!loggedUser){
+    return <Loader2 className='animate-spin'/>
+  }
 
   return (
     <section className='no-scroll home'>
@@ -14,7 +34,7 @@ const Home = () => {
           <HeaderContainer
             type="greeting"
             title="Welcome"
-            user={loggedUser?.firstName || 'Guest'}
+            user={loggedUser?.name || 'Guest'}
             subtext="to the best banking platform. Manage yur account and transactions with ease."
           />
         
